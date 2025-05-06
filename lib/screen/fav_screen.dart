@@ -12,6 +12,10 @@ class FavScreen extends StatefulWidget {
 class _FavScreenState extends State<FavScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        child: Text("This is the Fav page"),
+      ),
+    );
   }
 }
