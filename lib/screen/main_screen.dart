@@ -161,8 +161,8 @@ class _MainScreenState extends State<MainScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(product['price']!, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const Icon(Icons.favorite_border, color: Colors.green),
+                    Text(product['price']!, style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.black)),
+                    const Icon(Icons.favorite_border, color: Colors.black),
                   ],
                 ),
               ],
