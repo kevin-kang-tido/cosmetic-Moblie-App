@@ -21,6 +21,7 @@ void main() {
   final root = MaterialApp(
     home: screen,
     theme: ThemeData(
+      fontFamily: 'NotoSansKhmer',
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color.fromARGB(255, 84, 3, 223),
       ),

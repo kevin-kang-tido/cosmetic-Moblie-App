@@ -14,8 +14,11 @@ class _FavScreenState extends State<FavScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("This is the Fav page"),
-      ),
+        child: Text("This is the Fav page", style: TextStyle(
+            fontFamily: 'NotoSansKhmer'
+        ),
+    ),
+    ),
     );
   }
 }
