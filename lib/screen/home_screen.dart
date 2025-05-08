@@ -1,31 +1,34 @@
+import 'dart:convert';
+import 'package:cosmetic/model/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:provider/provider.dart';
+import '../product_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  final List<String> categories = const ['Skincare', 'Makeup', 'Haircare', 'Personal'];
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
-  final List<Map<String, String>> products = const [
-    {
-      'title': 'Black Skincare',
-      'subtitle': 'Aesthetic Skincare Branding',
-      'price': '\$10.99',
-      'image': 'assets/images/cosmetic_2.png',
-    },
-    {
-      'title': 'Black Skincare',
-      'subtitle': 'Aesthetic Skincare Branding',
-      'price': '\$10.99',
-      'image': 'assets/images/cosmetic_2.png',
-    },
-    {
-      'title': 'Black Skincare',
-      'subtitle': 'Aesthetic Skincare Branding',
-      'price': '\$10.99',
-      'image': 'assets/images/cosmetic_2.png',
-    },
-    // Add more products if needed
-  ];
+class _HomeScreenState extends State<HomeScreen> {
+  final List<String> categories = const ['Skincare', 'Makeup', 'Haircare', 'Personal'];
+  List<Product> _products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    final response = await rootBundle.loadString('assets/data/products.json');
+    final List data = json.decode(response);
+    setState(() {
+      _products = data.map((item) => Product.fromJson(item)).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,16 +108,19 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildProductList() {
+    final provider = Provider.of<ProductProvider>(context);
     return SizedBox(
       height: 220,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: products.length,
+        itemCount: _products.length,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final product = products[index];
+          final product = _products[index];
+          final isFav = provider.isFavorite(product);
+
           return Container(
-            width: 140,
+            width: 160,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -123,16 +129,19 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(product['image']!, height: 100, fit: BoxFit.cover),
+                Expanded(child: Image.asset(product.image, fit: BoxFit.cover)),
                 const SizedBox(height: 8),
-                Text(product['title']!, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(product['subtitle']!, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                const Spacer(),
+                Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(product.description, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                const SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(product['price']!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                    const Icon(Icons.favorite_border, color: Colors.black),
+                    Text('\$${product.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    IconButton(
+                      icon: Icon(Icons.favorite, color: isFav ? Colors.green : Colors.grey),
+                      onPressed: () => provider.toggleFavorite(product),
+                    ),
                   ],
                 ),
               ],

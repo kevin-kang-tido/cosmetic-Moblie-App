@@ -1,35 +1,34 @@
-import 'package:cosmetic/screen/main_screen.dart';
+import 'package:cosmetic/product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:cosmetic/screen/main_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-
-  // Control level
-  final control = ElevatedButton(onPressed: (){}, child: Icon(Icons.check));
-
-  // Layout level
-  final layout = Align(
-    alignment: Alignment.bottomRight,
-    child: Padding(
-      padding: EdgeInsets.all(20),
-      child: control,
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+      ],
+      child: const MyApp(),
     ),
   );
+}
 
-  final screen = MainScreen();
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  // Root tree
-  final root = MaterialApp(
-    home: screen,
-    theme: ThemeData(
-      fontFamily: 'NotoSansKhmer',
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color.fromARGB(255, 84, 3, 223),
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: const MainScreen(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 84, 3, 223),
+        ),
+        useMaterial3: false,
+        fontFamily: 'Lato',
       ),
-      useMaterial3: false,
-      // fontFamily:
-    ),
-    debugShowCheckedModeBanner: false,
-  );
-
-  runApp(root);
+      debugShowCheckedModeBanner: false,
+    );
+  }
 }

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Black Skincare",
+    "description": "Aesthetic Skincare Branding",
+    "image": "assets/images/cosmetic_1.png",
+    "price": 10.99
+  },
+  {
+    "name": "Glow Serum",
+    "description": "Brightening Face Serum",
+    "image": "assets/images/cosmetic_2.png",
+    "price": 15.50
+  },
+  {
+    "name": "Glow Serum",
+    "description": "Brightening Face Serum",
+    "image": "assets/images/cosmetic_2.png",
+    "price": 15.50
+  },
+  {
+    "name": "Glow Serum",
+    "description": "Brightening Face Serum",
+    "image": "assets/images/cosmetic_2.png",
+    "price": 15.50
+  }
+]
