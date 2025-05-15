@@ -1,4 +1,5 @@
 import 'package:cosmetic/product_provider.dart';
+import 'package:cosmetic/screen/add_cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cosmetic/screen/main_screen.dart';
 import 'package:provider/provider.dart';
@@ -10,9 +11,12 @@ void main() {
         ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],
       child: const MyApp(),
+
     ),
   );
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -29,6 +33,10 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Lato',
       ),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/cart': (_) => const AddCartScreen(),
+      },
+
     );
   }
 }

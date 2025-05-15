@@ -81,7 +81,16 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
           Stack(
             children: [
-              const Icon(Icons.shopping_cart_outlined, size: 26),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/cart'),
+                child: Stack(
+                  children: [
+                    const Icon(Icons.shopping_cart_outlined, size: 26),
+                    // Badge
+                  ],
+                ),
+              ),
+              // const Icon(Icons.shopping_cart_outlined, size: 26),
               Positioned(
                 right: 0,
                 top: 0,
