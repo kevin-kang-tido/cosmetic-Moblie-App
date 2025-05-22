@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cosmetic/model/product_model.dart';
+import 'package:cosmetic/screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -116,38 +117,112 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
+
   Widget _buildProductCard(BuildContext context, Product product) {
     final provider = Provider.of<ProductProvider>(context);
     final isFav = provider.isFavorite(product);
 
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(child: Center(child: Image.asset(product.image))),
-          const SizedBox(height: 8),
-          Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 2),
-          Text(product.description, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-          const SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('\$${product.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
-              IconButton(
-                icon: Icon(Icons.favorite, color: isFav ? Colors.green : Colors.grey),
-                onPressed: () => provider.toggleFavorite(product),
-              ),
-            ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProductDetailPage(product: product),
           ),
-        ],
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Center(
+                child: Image.asset(product.image),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              product.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              product.description,
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            const SizedBox(height: 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '\$${product.price.toStringAsFixed(2)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.favorite,
+                    color: isFav ? Colors.green : Colors.grey,
+                  ),
+                  onPressed: () {
+                    provider.toggleFavorite(product);
+                    provider.addToCart(product);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Added to cart')),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
+
+
+// Widget _buildProductCard(BuildContext context, Product product) {
+  //   final provider = Provider.of<ProductProvider>(context);
+  //   final isFav = provider.isFavorite(product);
+  //
+  //   return Container(
+  //     padding: const EdgeInsets.all(12),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(16),
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Expanded(child: Center(child: Image.asset(product.image))),
+  //         const SizedBox(height: 8),
+  //         Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+  //         const SizedBox(height: 2),
+  //         Text(product.description, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+  //         const SizedBox(height: 6),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text('\$${product.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
+  //             IconButton(
+  //               icon: Icon(Icons.favorite, color: isFav ? Colors.green : Colors.grey),
+  //               onPressed: () {
+  //                 provider.toggleFavorite(product);
+  //                 provider.addToCart(product); // 👈 Also add to cart
+  //                 ScaffoldMessenger.of(context).showSnackBar(
+  //                   const SnackBar(content: Text('Added to cart')),
+  //                 );
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
 }

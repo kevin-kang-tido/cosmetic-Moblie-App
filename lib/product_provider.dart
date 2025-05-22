@@ -45,6 +45,12 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addToCartMuti(Product product, int quantity) {
+    _cart.update(product, (qty) => qty + 1, ifAbsent: () => 1);
+    notifyListeners();
+  }
+
+
   void removeFromCart(Product product) {
     _cart.remove(product);
     notifyListeners();

@@ -40,8 +40,11 @@ class AddCartScreen extends StatelessWidget {
                 final qty = entry.value;
 
                 return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  leading: Image.asset(product.image, width: 50),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 21),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(product.image, width: 50, height: 50, fit: BoxFit.cover),
+                  ),
                   title: Text(product.name),
                   subtitle: Text(product.description),
                   trailing: Column(
@@ -69,39 +72,52 @@ class AddCartScreen extends StatelessWidget {
               },
             ),
           ),
-          Container(
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              children: [
-                _buildSummaryRow('Subtotal:', subtotal),
-                _buildSummaryRow('Delivery Fee:', deliveryFee),
-                _buildSummaryRow('Discount:', discount, red: true),
-                const Divider(),
-                _buildSummaryRow('Total:', total, bold: true),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              onPressed: () {},
-              child: const Text('Check Out'),
-            ),
-          ),
-          const SizedBox(height: 12),
         ],
       ),
+      bottomNavigationBar: cart.isEmpty
+          ? null
+          : Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(blurRadius: 6, color: Colors.black12)],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  _buildSummaryRow('Subtotal:', subtotal),
+                  _buildSummaryRow('Delivery Fee:', deliveryFee),
+                  _buildSummaryRow('Discount:', discount, red: true),
+                  const Divider(),
+                  _buildSummaryRow('Total:', total, bold: true),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 21),
+                ),
+                onPressed: () {},
+                child: const Text('Check Out'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
+
   }
 
   Widget _buildSummaryRow(String label, double amount, {bool red = false, bool bold = false}) {
