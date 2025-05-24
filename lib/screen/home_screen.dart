@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:cosmetic/model/product_model.dart';
+import 'package:cosmetic/screen/categories_screen.dart';
+import 'package:cosmetic/screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:provider/provider.dart';
@@ -91,14 +93,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return Wrap(
       spacing: 8,
       children: categories
-          .map((cat) => Chip(
-        label: Text(cat),
-        backgroundColor: Colors.white,
-        side: const BorderSide(color: Colors.grey),
+          .map((cat) => InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => CategoriesScreen(category: cat),
+            ),
+          );
+        },
+        child: Chip(
+          label: Text(cat),
+          backgroundColor: Colors.white,
+          side: const BorderSide(color: Colors.grey),
+        ),
       ))
           .toList(),
     );
   }
+
 
   Widget _buildSection(String title) {
     return Padding(
@@ -109,8 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildProductList() {
     final provider = Provider.of<ProductProvider>(context);
+
     return SizedBox(
-      height: 220,
+      height: 230,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: _products.length,
@@ -119,36 +133,60 @@ class _HomeScreenState extends State<HomeScreen> {
           final product = _products[index];
           final isFav = provider.isFavorite(product);
 
-          return Container(
-            width: 160,
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: Image.asset(product.image, fit: BoxFit.cover)),
-                const SizedBox(height: 8),
-                Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(product.description, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('\$${product.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    IconButton(
-                      icon: Icon(Icons.favorite, color: isFav ? Colors.green : Colors.grey),
-                      onPressed: () => provider.toggleFavorite(product),
-                    ),
-                  ],
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ProductDetailPage(product: product),
                 ),
-              ],
+              );
+            },
+            child: Container(
+              width: 160,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Image.asset(
+                        product.image,
+                        height: 100,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(product.description, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('\$${product.price.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      IconButton(
+                        icon: Icon(Icons.favorite,
+                            color: isFav ? Colors.green : Colors.grey),
+                        onPressed: () => provider.toggleFavorite(product),
+                        iconSize: 20,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
       ),
     );
   }
+
 }

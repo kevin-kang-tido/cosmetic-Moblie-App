@@ -47,25 +47,35 @@ class AddCartScreen extends StatelessWidget {
                   ),
                   title: Text(product.name),
                   subtitle: Text(product.description),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('\$${product.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: () => provider.decrementQty(product),
-                            icon: const Icon(Icons.remove_circle_outline),
-                          ),
-                          Text(qty.toString().padLeft(2, '0')),
-                          IconButton(
-                            onPressed: () => provider.incrementQty(product),
-                            icon: const Icon(Icons.add_circle_outline),
-                          ),
-                        ],
-                      ),
-                    ],
+                  trailing: SizedBox(
+                    height: 60, // constrain height to prevent overflow
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '\$${product.price.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () => provider.decrementQty(product),
+                              icon: const Icon(Icons.remove_circle_outline, size: 20),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                            ),
+                            Text(qty.toString().padLeft(2, '0')),
+                            IconButton(
+                              onPressed: () => provider.incrementQty(product),
+                              icon: const Icon(Icons.add_circle_outline, size: 20),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   onLongPress: () => provider.removeFromCart(product),
                 );
@@ -76,44 +86,46 @@ class AddCartScreen extends StatelessWidget {
       ),
       bottomNavigationBar: cart.isEmpty
           ? null
-          : Container(
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(blurRadius: 6, color: Colors.black12)],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                children: [
-                  _buildSummaryRow('Subtotal:', subtotal),
-                  _buildSummaryRow('Delivery Fee:', deliveryFee),
-                  _buildSummaryRow('Discount:', discount, red: true),
-                  const Divider(),
-                  _buildSummaryRow('Total:', total, bold: true),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(vertical: 21),
+          : SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: [BoxShadow(blurRadius: 6, color: Colors.black12)],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blue),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                onPressed: () {},
-                child: const Text('Check Out'),
+                child: Column(
+                  children: [
+                    _buildSummaryRow('Subtotal:', subtotal),
+                    _buildSummaryRow('Delivery Fee:', deliveryFee),
+                    _buildSummaryRow('Discount:', discount, red: true),
+                    const Divider(),
+                    _buildSummaryRow('Total:', total, bold: true),
+                  ],
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(vertical: 21),
+                  ),
+                  onPressed: () {},
+                  child: const Text('Check Out'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

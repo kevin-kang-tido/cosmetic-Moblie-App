@@ -63,8 +63,8 @@ class _ShopScreenState extends State<ShopScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
-          const Icon(Icons.arrow_back_ios, size: 20),
-          const SizedBox(width: 10),
+          // const Icon(Icons.arrow_back_ios, size: 20),
+          // const SizedBox(width: 10),
           Expanded(
             child: TextField(
               decoration: InputDecoration(

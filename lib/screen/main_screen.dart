@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _buildTopBar(),
+            _buildTopBar(context),
             const SizedBox(height: 12),
             Expanded(child: _screens[_selectedIndex]),
           ],
@@ -51,25 +51,42 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildTopBar() {
+  Widget _buildTopBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
-        children: const [
-          Icon(Icons.menu, size: 30),
-          SizedBox(width: 12),
+        children: [
+          const Icon(Icons.menu, size: 30),
+          const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              'Shopie',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MainScreen()),
+                );
+              },
+              child: const Text(
+                'Shopie',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
             ),
           ),
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: AssetImage('assets/images/cosmetic_2.png'),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const UserScreen()),
+              );
+            },
+            child: const CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage('assets/images/profile.png'),
+            ),
           ),
         ],
       ),
     );
   }
+
 }

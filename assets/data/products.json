@@ -3,24 +3,63 @@
     "name": "Black Skincare",
     "description": "Aesthetic Skincare Branding",
     "image": "assets/images/cosmetic_1.png",
-    "price": 10.99
+    "price": 10.99,
+    "category": "Skincare"
   },
   {
     "name": "Glow Serum",
     "description": "Brightening Face Serum",
     "image": "assets/images/cosmetic_2.png",
-    "price": 15.50
+    "price": 12.50,
+    "category": "Skincare"
   },
   {
     "name": "Glow Serum",
     "description": "Brightening Face Serum",
-    "image": "assets/images/cosmetic_2.png",
-    "price": 15.50
+    "image": "assets/images/cosmetic_3.png",
+    "price": 13.50,
+    "category": "Skincare"
+  },
+  {
+    "name": "Concealer",
+    "description": "Covers blemishes, dark circles",
+    "image": "assets/images/cosmetic_4.png",
+    "price": 14.50,
+    "category": "Skincare"
+  },
+  {
+    "name": "Blush ",
+    "description": "Sets makeup and reduces shine",
+    "image": "assets/images/cosmetic_5.png",
+    "price": 14.50,
+    "category": "Skincare"
   },
   {
     "name": "Glow Serum",
     "description": "Brightening Face Serum",
-    "image": "assets/images/cosmetic_2.png",
-    "price": 15.50
+    "image": "assets/images/cosmetic_6.png",
+    "price": 13.50,
+    "category": "Skincare"
+  },
+  {
+    "name": "Glow Serum",
+    "description": "Brightening Face Serum",
+    "image": "assets/images/cosmetic_7.png",
+    "price": 14.50,
+    "category": "Skincare"
+  },
+  {
+    "name": "dark circles",
+    "description": "Brightening Face Serum",
+    "image": "assets/images/cosmetic_8.png",
+    "price": 14.50,
+    "category": "Skincare"
+  },
+  {
+    "name": "Glow Serum",
+    "description": "Brightening Face Serum",
+    "image": "assets/images/cosmetic_9.png",
+    "price": 14.50,
+    "category": "Skincare"
   }
 ]
