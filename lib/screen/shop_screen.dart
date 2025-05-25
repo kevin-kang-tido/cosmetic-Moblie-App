@@ -172,7 +172,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     provider.toggleFavorite(product);
                     // provider.addToCart(product);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Added to cart')),
+                      const SnackBar(content: Text('Added to favorite')),
                     );
                   },
                 ),
