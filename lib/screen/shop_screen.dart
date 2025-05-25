@@ -170,7 +170,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                   onPressed: () {
                     provider.toggleFavorite(product);
-                    provider.addToCart(product);
+                    // provider.addToCart(product);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Added to cart')),
                     );

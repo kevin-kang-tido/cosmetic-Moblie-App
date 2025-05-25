@@ -1,3 +1,6 @@
+import 'package:cosmetic/screen/main_screen.dart';
+import 'package:cosmetic/screen/payment_screen.dart';
+import 'package:cosmetic/screen/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../product_provider.dart';
@@ -17,14 +20,11 @@ class AddCartScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shopping Bag'),
-        leading: const BackButton(),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(Icons.shopping_cart_outlined),
-          )
-        ],
+        backgroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 70,
+        automaticallyImplyLeading: false,
+        title: _buildTopBar(context),
       ),
       body: cart.isEmpty
           ? const Center(child: Text('Your cart is empty'))
@@ -120,7 +120,14 @@ class AddCartScreen extends StatelessWidget {
                     backgroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(vertical: 21),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PaymentPage(total: total),
+                      ),
+                    );
+                  },
                   child: const Text('Check Out'),
                 ),
               ),
@@ -130,6 +137,44 @@ class AddCartScreen extends StatelessWidget {
       ),
     );
 
+  }
+
+  Widget _buildTopBar(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          const Icon(Icons.menu, size: 30,color: Colors.black,),
+          const SizedBox(width: 12),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MainScreen()),
+                );
+              },
+              child: const Text(
+                'Shopie',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.black),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const UserScreen()),
+              );
+            },
+            child: const CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage('assets/images/profile.png'),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildSummaryRow(String label, double amount, {bool red = false, bool bold = false}) {

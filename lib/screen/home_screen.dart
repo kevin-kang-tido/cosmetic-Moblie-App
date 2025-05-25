@@ -173,7 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       IconButton(
                         icon: Icon(Icons.favorite,
                             color: isFav ? Colors.green : Colors.grey),
-                        onPressed: () => provider.toggleFavorite(product),
+                        onPressed: () => {
+                          provider.toggleFavorite(product),
+                          // provider.addToCart(product)
+                        },
                         iconSize: 20,
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
