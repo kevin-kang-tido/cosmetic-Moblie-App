@@ -1,0 +1,177 @@
+import 'package:cosmetic/screen/login_screent.dart';
+import 'package:flutter/material.dart';
+
+import '../data/app_shared_pref.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  bool _isObscureText = true;
+  final _key = GlobalKey<FormState>();
+
+  final _fullNameTextEditingController = TextEditingController();
+  final _emailTextEditingController = TextEditingController();
+  final _passwordTextEditingController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final fullNameWidget = Padding(
+      padding: EdgeInsets.only(bottom: 8),
+      child: TextFormField(
+        controller: _fullNameTextEditingController,
+        decoration: InputDecoration(
+          hintText: "Full Name",
+          prefixIcon: Icon(Icons.account_circle),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "FullName is required";
+          }
+          return null;
+        },
+      ),
+    );
+
+    final emailWidget = Padding(
+      padding: EdgeInsets.only(bottom: 8),
+      child: TextFormField(
+        controller: _emailTextEditingController,
+        decoration: InputDecoration(
+          hintText: "Email",
+          prefixIcon: Icon(Icons.account_circle),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Email is required";
+          }
+          return null;
+        },
+      ),
+    );
+
+    final passwordWidget = Padding(
+      padding: EdgeInsets.only(bottom: 8),
+      child: TextFormField(
+        controller: _passwordTextEditingController,
+        obscureText: _isObscureText,
+        decoration: InputDecoration(
+          hintText: "Password",
+          prefixIcon: Icon(Icons.lock),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+          suffixIcon: _isObscureText
+              ? GestureDetector(
+            child: Icon(Icons.visibility),
+            onTap: () {
+              setState(() {
+                _isObscureText = !_isObscureText;
+              });
+            },
+          )
+              : GestureDetector(
+            child: Icon(Icons.visibility_off),
+            onTap: () {
+              setState(() {
+                _isObscureText = !_isObscureText;
+              });
+            },
+          ),
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Password is required";
+          }
+          return null;
+        },
+      ),
+    );
+
+    final registerButton = Padding(
+      padding: EdgeInsets.only(top: 16, bottom: 16),
+      child: SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: ElevatedButton(
+          onPressed: () {
+            if (_key.currentState!.validate()) {
+              String fullName = _fullNameTextEditingController.text;
+              String email = _emailTextEditingController.text;
+              String password = _passwordTextEditingController.text;
+              _register(fullName, email, password);
+            }
+          },
+          child: Text("Register", style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.indigoAccent),
+        ),
+      ),
+    );
+
+    final navigateToLogin = Padding(
+      padding: EdgeInsets.only(bottom: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Don't have an account?"),
+          TextButton(
+            onPressed: () {
+              final route = MaterialPageRoute(
+                builder: (context) => LoginScreen(),
+              );
+              Navigator.push(context, route);
+            },
+            child: Text("Login"),
+          ),
+        ],
+      ),
+    );
+
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.only(left: 16, right: 16),
+          child: Center(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Form(
+                    key: _key,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/images/cosmetic_1.png",
+                          width: 200,
+                          height: 200,
+                        ),
+                        fullNameWidget,
+                        emailWidget,
+                        passwordWidget,
+                        registerButton,
+                      ],
+                    ),
+                  ),
+                ),
+                navigateToLogin,
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _register(String fullName, String email, String password) async {
+    final appSharedPref = AppSharedPref();
+    await appSharedPref.register(fullName, email, password);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
+}
