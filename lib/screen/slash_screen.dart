@@ -1,5 +1,6 @@
 import 'package:cosmetic/screen/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: ElevatedButton(
                   onPressed: (){
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
-                  }, child: Text("Get Start", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
+                  }, child: Text("getStart".tr, style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.indigoAccent
                   ),

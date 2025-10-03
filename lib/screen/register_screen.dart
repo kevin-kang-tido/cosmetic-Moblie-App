@@ -1,7 +1,8 @@
-import 'package:cosmetic/screen/login_screent.dart';
-import 'package:flutter/material.dart';
 
-import '../data/app_shared_pref.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'login_screent.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -14,127 +15,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isObscureText = true;
   final _key = GlobalKey<FormState>();
 
-  final _fullNameTextEditingController = TextEditingController();
-  final _emailTextEditingController = TextEditingController();
-  final _passwordTextEditingController = TextEditingController();
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  Future<void> _register(String fullName, String email, String password) async {
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      await userCredential.user?.updateDisplayName(fullName);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Register success")),
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Register failed: ${e.code}")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final fullNameWidget = Padding(
-      padding: EdgeInsets.only(bottom: 8),
-      child: TextFormField(
-        controller: _fullNameTextEditingController,
-        decoration: InputDecoration(
-          hintText: "Full Name",
-          prefixIcon: Icon(Icons.account_circle),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "FullName is required";
-          }
-          return null;
-        },
-      ),
-    );
-
-    final emailWidget = Padding(
-      padding: EdgeInsets.only(bottom: 8),
-      child: TextFormField(
-        controller: _emailTextEditingController,
-        decoration: InputDecoration(
-          hintText: "Email",
-          prefixIcon: Icon(Icons.account_circle),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Email is required";
-          }
-          return null;
-        },
-      ),
-    );
-
-    final passwordWidget = Padding(
-      padding: EdgeInsets.only(bottom: 8),
-      child: TextFormField(
-        controller: _passwordTextEditingController,
-        obscureText: _isObscureText,
-        decoration: InputDecoration(
-          hintText: "Password",
-          prefixIcon: Icon(Icons.lock),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-          suffixIcon: _isObscureText
-              ? GestureDetector(
-            child: Icon(Icons.visibility),
-            onTap: () {
-              setState(() {
-                _isObscureText = !_isObscureText;
-              });
-            },
-          )
-              : GestureDetector(
-            child: Icon(Icons.visibility_off),
-            onTap: () {
-              setState(() {
-                _isObscureText = !_isObscureText;
-              });
-            },
-          ),
-        ),
-        validator: (value) {
-          if (value!.isEmpty) {
-            return "Password is required";
-          }
-          return null;
-        },
-      ),
-    );
-
-    final registerButton = Padding(
-      padding: EdgeInsets.only(top: 16, bottom: 16),
-      child: SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: ElevatedButton(
-          onPressed: () {
-            if (_key.currentState!.validate()) {
-              String fullName = _fullNameTextEditingController.text;
-              String email = _emailTextEditingController.text;
-              String password = _passwordTextEditingController.text;
-              _register(fullName, email, password);
-            }
-          },
-          child: Text("Register", style: TextStyle(color: Colors.white)),
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.indigoAccent),
-        ),
-      ),
-    );
-
-    final navigateToLogin = Padding(
-      padding: EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Don't have an account?"),
-          TextButton(
-            onPressed: () {
-              final route = MaterialPageRoute(
-                builder: (context) => LoginScreen(),
-              );
-              Navigator.push(context, route);
-            },
-            child: Text("Login"),
-          ),
-        ],
-      ),
-    );
-
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: EdgeInsets.only(left: 16, right: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Center(
             child: Column(
               children: [
@@ -149,29 +61,97 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           width: 200,
                           height: 200,
                         ),
-                        fullNameWidget,
-                        emailWidget,
-                        passwordWidget,
-                        registerButton,
+                        TextFormField(
+                          controller: _fullNameController,
+                          decoration: InputDecoration(
+                            hintText: "Full Name",
+                            prefixIcon: const Icon(Icons.account_circle),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                          ),
+                          validator: (v) =>
+                          v!.isEmpty ? "Full name required" : null,
+                        ),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            hintText: "Email",
+                            prefixIcon: const Icon(Icons.email),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                          ),
+                          validator: (v) =>
+                          v!.isEmpty ? "Email required" : null,
+                        ),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: _isObscureText,
+                          decoration: InputDecoration(
+                            hintText: "Password",
+                            prefixIcon: const Icon(Icons.lock),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                            suffixIcon: IconButton(
+                              icon: Icon(_isObscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                              onPressed: () {
+                                setState(() {
+                                  _isObscureText = !_isObscureText;
+                                });
+                              },
+                            ),
+                          ),
+                          validator: (v) =>
+                          v!.isEmpty ? "Password required" : null,
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_key.currentState!.validate()) {
+                                _register(
+                                  _fullNameController.text,
+                                  _emailController.text,
+                                  _passwordController.text,
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.indigoAccent),
+                            child: const Text("Register",
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-                navigateToLogin,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Already have an account?"),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()),
+                        );
+                      },
+                      child: const Text("Login"),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _register(String fullName, String email, String password) async {
-    final appSharedPref = AppSharedPref();
-    await appSharedPref.register(fullName, email, password);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
     );
   }
 }

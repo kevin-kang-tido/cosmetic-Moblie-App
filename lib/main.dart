@@ -1,15 +1,25 @@
-// lib/main.dart (Updated)
-
-import 'package:cosmetic/data/app_shared_pref.dart';
 import 'package:cosmetic/product_provider.dart';
 import 'package:cosmetic/screen/add_cart_screen.dart';
-import 'package:cosmetic/screen/register_screen.dart';
 import 'package:cosmetic/screen/slash_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:cosmetic/screen/main_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() {
+import 'translate/app_translate.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+
   runApp(
     MultiProvider(
       providers: [
@@ -25,17 +35,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // Use the AuthWrapper as the home screen
-      home: const AuthWrapper(),
-      theme: ThemeData(
+    return GetMaterialApp(
+      title: 'Cosmetic App',
+
+      // Translation
+      translations: AppTranslate(),
+      locale: Get.deviceLocale,
+      fallbackLocale: const Locale("en", ""),
+      supportedLocales: const [
+        Locale("en", ""),
+        Locale("km", ""), // Khmer
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
+      // Theme setup
+      theme: ThemeData.light().copyWith(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 84, 3, 223),
         ),
-        useMaterial3: false,
-        fontFamily: 'Lato',
       ),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
+
       debugShowCheckedModeBanner: false,
+
+      // Auth wrapper
+      home: const AuthWrapper(),
+
       routes: {
         '/cart': (_) => const AddCartScreen(),
       },
@@ -43,35 +73,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// This new widget checks the auth status and directs the user
-class AuthWrapper extends StatefulWidget {
+/// Authentication Wrapper with Firebase
+class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
 
   @override
-  State<AuthWrapper> createState() => _AuthWrapperState();
-}
-
-class _AuthWrapperState extends State<AuthWrapper> {
-  final AppSharedPref _prefs = AppSharedPref();
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: _prefs.isLoggedIn(),
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        // Show a loading screen while we check the auth status
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
-
-        // If the user is logged in, show the MainScreen
-        if (snapshot.hasData && snapshot.data == true) {
+        if (snapshot.hasData) {
           return const MainScreen();
         }
-
-        // Otherwise, show the RegisterScreen
         return const SplashScreen();
       },
     );

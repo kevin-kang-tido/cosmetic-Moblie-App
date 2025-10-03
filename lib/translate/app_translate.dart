@@ -1,0 +1,58 @@
+
+import 'package:get/get.dart';
+
+class AppTranslate extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+    "en_US": {
+      "hi": "Hi",
+      "home": "Home",
+      "faculty": "Faculty",
+      "news": "News",
+      "skincare":"Skincare",
+      "makeup":"Makeup",
+      "haircare":"Haircare",
+      "personal":"Personal",
+      "getStart":"Get Start",
+      "newArrivals":"New Arrivals",
+      "bestSales":"Best Sales",
+      "more": "More",
+      "language": "Language",
+      "khmer": "Khmer",
+      "english": "Enlish",
+      "khmerLanguage": "Khmer Language",
+      "englishLanguage": "English Language",
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "themeLight": "Theme Light",
+      "themeDark": "Theme Dark",
+      "profile": "Profile",
+    },
+    "km_KH": {
+      "hi": "សួស្តី",
+      "home": "ដើម",
+      "faculty": "មហាវិទ្យាល័យ",
+      "news": "ព័ត៏មាន",
+      "more": "បន្ថែម",
+      "language": "ភាសា",
+      "khmer": "ខ្មែរ",
+      "english": "អង់គ្លេស",
+      "khmerLanguage": "ភាសាខ្មែរ",
+      "englishLanguage": "ភាសាអង់គ្លេស",
+      "theme": "ផ្ទៃ",
+      "light": "ព័ណ៏ស",
+      "dark": "ព័ណ៏ខ្មៅ",
+      "themeLight": "ផ្ទៃព័ណ៏ស",
+      "themeDark": "ផ្ទៃព័ណ៏ខ្មៅ",
+      "profile": "គណនី",
+      "skincare":"ការពារកម្កៅថ្ងែ",
+      "makeup":"គ្រឿងសម្អាង",
+      "haircare":"ថែរក្សាសក់",
+      "personal":"ផ្ទស់ខ្ឡុន",
+      "getStart":"ចាប់ផ្ដើម",
+      "newArrivals":"មកដល់ថ្មី",
+      "bestSales":"លក់ដាច់",
+    },
+  };
+}

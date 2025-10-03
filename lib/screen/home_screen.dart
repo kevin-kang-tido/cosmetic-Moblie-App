@@ -4,8 +4,10 @@ import 'package:cosmetic/screen/categories_screen.dart';
 import 'package:cosmetic/screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../product_provider.dart';
+import 'language_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +17,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<String> categories = const ['Skincare', 'Makeup', 'Haircare', 'Personal'];
+
+  final List<String> categories = [
+    "skincare".tr,
+    "makeup".tr,
+    "haircare".tr,
+    "personal".tr,
+  ];
+
+
   List<Product> _products = [];
 
   @override
@@ -47,10 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 16),
               _buildCategories(),
               const SizedBox(height: 16),
-              _buildSection('New Arrivals'),
+              _buildSection('newArrivals'.tr),
               _buildProductList(),
               const SizedBox(height: 16),
-              _buildSection('Best Sales'),
+              _buildSection('bestSales'.tr),
               _buildProductList(),
               const SizedBox(height: 16),
             ],
